@@ -2,6 +2,7 @@ import React from "react";
 import { useState } from "react";
 import axios from "axios";
 
+// 회원가입 페이지
 function Signup() {
     const [formData, setFormData] = useState({
         email:'',

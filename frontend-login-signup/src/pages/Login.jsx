@@ -4,6 +4,7 @@ import { useNavigate} from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import axios from "axios";
 
+// 로그인 페이지
 function Login() {
     
     const navigate = useNavigate(); // 페이지 이동
