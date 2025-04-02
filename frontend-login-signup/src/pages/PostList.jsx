@@ -12,7 +12,7 @@ function PostList() {
       // 게시글 불러오기
       const fetchPosts = async () => {
         try {
-          const response = await axios.get("http://localhost:8082/api/boards");
+          const response = await axios.get("http://localhost:8082/api/boards/");
           setPosts(response.data); // 게시글 목록 상태에 저장
         } catch (error) {
           console.error("게시글 불러오기 실패:", error);
