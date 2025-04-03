@@ -1,5 +1,4 @@
-import React, { useContext } from "react";
-import { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate} from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import axios from "axios";
@@ -8,6 +7,7 @@ import axios from "axios";
 function Login() {
     
     const navigate = useNavigate(); // 페이지 이동
+
     const { login } = useContext(AuthContext); // context에서 login 함수 가져오기
 
     const [loginData, setLoginData] = useState({
@@ -35,7 +35,7 @@ function Login() {
     };
 
     return (
-        <div>
+        <div style={{ maxWidth: 400, margin: "0 auto" }}>
             <h2> 로그인 </h2>
             <form onSubmit={handleSubmit}>
             <input name="email" type="email" placeholder="이메일" onChange={handleChange} /><br />

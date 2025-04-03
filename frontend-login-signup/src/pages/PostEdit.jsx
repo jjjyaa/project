@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function PostEdit() {
-  const { id } = useParams(); // URL에서 게시글 ID 추출
+  const { id } = useParams(); // URL에서 게시글 ID 가져오기
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
@@ -13,28 +13,24 @@ function PostEdit() {
 
   // 게시글 정보 불러오기
   useEffect(() => {
-    const fetchPost = async () => {
-      try {
-        const response = await axios.get(`http://localhost:8082/api/boards/${id}`);
+    axios.get(`http://localhost:8082/api/boards/${id}`)
+      .then((res) => {
         setForm({
-          title: response.data.title,
-          contents: response.data.contents,
+          title: res.data.title,
+          contents: res.data.contents
         });
-      } catch (error) {
-        console.error("게시글 불러오기 실패:", error);
-        alert("게시글 정보를 불러오는 데 실패했습니다.");
-      }
-    };
-    fetchPost();
-  }, [id]);
+      })
+      .catch((err) => {
+        console.error(err);
+        alert("게시글을 불러오는데 실패했습니다.");
+        navigate("/list");
+      });
+  }, [id, navigate]);
 
   // 입력 값 변경 처리
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setForm((prev) => ({...prev, [name]: value}));
   };
 
   // 수정 요청 보내기
@@ -45,8 +41,8 @@ function PostEdit() {
       alert("게시글이 수정되었습니다.");
       navigate(`/detail/${id}`);
     } catch (error) {
-      console.error("게시글 수정 실패:", error);
-      alert("수정에 실패했습니다.");
+      console.error(error);
+      alert("수정실패");
     }
   };
 

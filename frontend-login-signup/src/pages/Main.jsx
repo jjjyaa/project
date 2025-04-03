@@ -13,10 +13,15 @@ function Main() {
       navigate('/login');
     };
 
+    const goToWrite = () => {
+      navigate("/write")
+    }
+
     return (
-        <div>
+        <div style={{ textAlign: "center", marginTop: "50px" }}>
         <h2>{user ? `${user.name}님, 환영합니다! 🎉` : '로그인 정보 없음'}</h2>
-        <button onClick={handleLogout}>로그아웃</button>
+        <button onClick={goToWrite}>글쓰기</button>
+        <button onClick={handleLogout} style={{marginLeft:"10px"}}>로그아웃</button>
       </div>
     );
 }
