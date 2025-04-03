@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { AuthContext } from "../context/AuthContext";
 
 // 게시물 상세 조회
 function PostDetail() {
@@ -10,8 +11,10 @@ function PostDetail() {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
 
+  const { user } = useContext(AuthContext);
+  const userEmail = user?.email;
+
   const navigate = useNavigate();
-  const userEmail = localStorage.getItem("email");
 
   // 게시글 불러오기
   useEffect(() => {
@@ -41,7 +44,7 @@ function PostDetail() {
 
     axios.post("http://localhost:8082/api/comments", {
       boardId: id,
-      contents: newComment,
+      content: newComment,
       memberEmail: userEmail
     })
     .then(() => {
