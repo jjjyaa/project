@@ -45,7 +45,7 @@ function PostDetail() {
     axios.post("http://localhost:8082/api/comments", {
       boardId: id,
       content: newComment,
-      memberEmail: userEmail
+      email: userEmail
     })
     .then(() => {
       setNewComment("");
@@ -63,7 +63,6 @@ function PostDetail() {
     if (!confirmed) return;
 
     axios.delete(`http://localhost:8082/api/comments/${commentId}`, {
-      memberEmail: userEmail
     })
     .then(() => fetchComments())
     .catch((err) => {

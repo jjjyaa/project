@@ -28,13 +28,13 @@ function PostWrite() {
     try {
       const postData = {
         title: form.title,
-        contents: form.contents
+        contents: form.contents,
+        email: user.email
       };
 
       const response = await axios.post("http://localhost:8082/api/boards/", postData, {
         headers: {
           "Content-Type": "application/json",
-          "email" : user.email,
         },
     });
       alert("글 작성 완료");

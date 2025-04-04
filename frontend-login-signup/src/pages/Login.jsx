@@ -27,6 +27,7 @@ function Login() {
             alert('로그인 성공');
             const userData = response.data; // 서버로 받은 사용자 정보
             login(userData); // 저장
+            
             navigate('/main'); // 메인페이지 이동
         } catch (error) {
             alert('로그인 실패');
