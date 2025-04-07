@@ -12,9 +12,21 @@ function PostList() {
   
     useEffect(() => {
       axios.get("http://localhost:8082/api/boards/")
-      .then((res) => {setPosts(res.data);})
-      .catch((err) => {console.error("게시글 목록 가져오기 실패", err);});
-      }, []);
+        .then((res) => { 
+          console.log("게시글 목록 응답:", res.data);
+          if (Array.isArray(res.data)) {
+            setPosts(res.data);
+          } else {
+            console.warn("받은 데이터가 배열이 아님:", res.data);
+            setPosts([]);
+          }
+        })
+        .catch((err) => {
+          console.error("게시글 목록 가져오기 실패", err);
+          setPosts([]);
+        });
+    }, []);
+    
     
     const handleCheckboxChange = (id) => {
       setSelectedIds((prev) => prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
@@ -53,6 +65,7 @@ function PostList() {
             <th>작성자</th>
             <th>작성일</th>
             <th>조회수</th>
+            <th>파일</th>
           </tr>
           </thead>
           <tbody>
@@ -73,6 +86,7 @@ function PostList() {
               <td>{post.member?.name}</td>
               <td>{post.createdDatetime}</td>
               <td>{post.hitCnt}</td>
+              <td>{post.fileList && post.fileList.length > 0 ? 'O' : 'X'}</td>
             </tr>
           ))}
         </tbody>

@@ -12,9 +12,15 @@ function PostWrite() {
     contents: ""
   });
 
+  const [file, setFile] = useState(null);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
   };
 
   const handleSubmit = async (e) => {
@@ -26,17 +32,21 @@ function PostWrite() {
       return;
     }
     try {
-      const postData = {
-        title: form.title,
-        contents: form.contents,
-        email: user.email
-      };
+      // FormData 생성
+      const formData = new FormData();
+      formData.append("title", form.title);
+      formData.append("contents", form.contents);
+      formData.append("email", user.email);
+      if (file) {
+        formData.append("file", file);
+      }
 
-      const response = await axios.post("http://localhost:8082/api/boards/", postData, {
+      // multipart/form-data 전송
+      await axios.post("http://localhost:8082/api/boards/", formData, {
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "multipart/form-data",
         },
-    });
+      });
       alert("글 작성 완료");
       navigate("/list"); // 글 목록 페이지로 이동
     } catch (error) {
@@ -51,6 +61,7 @@ function PostWrite() {
       <form onSubmit={handleSubmit}>
         <input type="text" name="title" placeholder="제목" value={form.title} onChange={handleChange} style={{ width: "100%", marginBottom: "10px" }} />
         <textarea name="contents" placeholder="내용" value={form.contents} onChange={handleChange} rows="10" style={{ width: "100%", marginBottom: "10px" }} />
+        <input type="file" onChange={handleFileChange} accept="image/*" style={{ marginBottom: "10px" }}/>
         <button type="submit">등록</button>
       </form>
     </div>

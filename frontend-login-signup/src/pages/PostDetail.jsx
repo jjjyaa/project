@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
 
-// 게시물 상세 조회
+// 게시물 상세 조회 페이지
 function PostDetail() {
   const { id } = useParams(); // URL에서 :id 값을 추출
   const [post, setPost] = useState(null); // 게시글 데이터 저장
@@ -14,8 +14,15 @@ function PostDetail() {
   const { user } = useContext(AuthContext);
   const userEmail = user?.email;
 
-  const navigate = useNavigate();
+  const [editingCommentId, setEditingCommentId] = useState(null);
+  const [editingContent, setEditingContent] = useState("");
 
+  const [likeCount, setLikeCount] = useState(0);
+  const [likedByUser, setLikedByUser] = useState(false);
+
+
+  const navigate = useNavigate();
+             
   // 게시글 불러오기
   useEffect(() => {
     axios.get(`http://localhost:8082/api/boards/${id}`)
@@ -57,18 +64,46 @@ function PostDetail() {
     });
   };
 
+  // 댓글 수정
+  const handleUpdateComment = (commentId) => {
+    if (!editingContent.trim()) return;
+
+    axios.patch(`http://localhost:8082/api/comments/${commentId}`, {
+      content: editingContent,
+      email : userEmail
+    })
+      .then(() => {
+        setEditingCommentId(null);
+        setEditingContent("");
+        fetchComments();
+      })
+      .catch((err) => {
+        console.error(err);
+        alert("댓글 수정 실패");
+      });
+  };
+
   // 댓글 삭제
   const handleDeleteComment = (commentId) => {
     const confirmed = window.confirm("댓글을 삭제할까요?");
     if (!confirmed) return;
 
-    axios.delete(`http://localhost:8082/api/comments/${commentId}`, {
+    axios.request({
+      method: "delete",
+      url: `http://localhost:8082/api/comments/${commentId}`,
+      data: {
+        commentId: commentId, 
+        email: userEmail       
+      }
     })
-    .then(() => fetchComments())
-    .catch((err) => {
-      console.error(err);
-      alert("삭제 실패");
-    });
+      .then(() => {
+        alert("댓글이 삭제되었습니다.");
+        fetchComments();
+      })
+      .catch((err) => {
+        console.error(err);
+        alert("삭제 실패: " + (err.response?.data || "서버 에러"));
+      });
   };
 
   // 게시글 삭제
@@ -97,20 +132,63 @@ function PostDetail() {
       <hr />
       <p><strong>내용:</strong></p>
       <p>{post.contents}</p>
+      
+      {post.fileList && post.fileList.length > 0 && (
+        <div style={{ marginTop: "10px" }}>
+          <h4>첨부파일</h4>
+          <ul>
+            {post.fileList.map((file, index) => (
+              <li key={index}>
+                <a href={`http://localhost:8082/uploads/${file.storedFilePath}`} target="_blank" rel="noreferrer">
+                  {file.originalFileName}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       <hr />
       <h3>💬 댓글</h3>
       {comments.map((comment) => (
         <div key={comment.commentId} style={{ borderBottom: "1px solid #ccc", padding: "8px 0" }}>
-          <p>{comment.content}</p>
-          <div style={{ fontSize: "0.9em", color: "#777" }}>
-            {comment.member?.name} | {comment.createdDatetime}
-            {comment.member?.email === userEmail && (
-              <button onClick={() => handleDeleteComment(comment.commentId)} style={{ marginLeft: 10, color: "red" }}>
-                삭제
-              </button>
-            )}
-          </div>
+          {editingCommentId === comment.commentId ? (
+            <>
+              <textarea
+                value={editingContent}
+                onChange={(e) => setEditingContent(e.target.value)}
+                style={{ width: "100%" }}
+              />
+              <button onClick={() => handleUpdateComment(comment.commentId)}>저장</button>
+              <button onClick={() => setEditingCommentId(null)}>취소</button>
+            </>
+          ) : (
+            <>
+              <p>{comment.content}</p>
+              <div style={{ fontSize: "0.9em", color: "#777" }}>
+                {comment.member?.name} | {comment.createdDatetime}
+                {comment.member?.email === userEmail && (
+                  <>
+                    <button
+                      onClick={() => {
+                        setEditingCommentId(comment.commentId);
+                        setEditingContent(comment.content);
+                      }}
+                      style={{ marginLeft: 10 }}
+                    >
+                      수정
+                    </button>
+                    <button
+                      onClick={() => handleDeleteComment(comment.commentId)}
+                      style={{ marginLeft: 10, color: "red" }}
+                    >
+                      삭제
+                    </button>
+                  </>
+                )}
+              </div>
+            </>
+          )}
         </div>
       ))}
 
