@@ -17,10 +17,6 @@ function PostDetail() {
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [editingContent, setEditingContent] = useState("");
 
-  const [likeCount, setLikeCount] = useState(0);
-  const [likedByUser, setLikedByUser] = useState(false);
-
-
   const navigate = useNavigate();
              
   // 게시글 불러오기
