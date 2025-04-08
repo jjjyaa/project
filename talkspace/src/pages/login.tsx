@@ -1,4 +1,4 @@
-// pages/login.tsx
+// pages/login.tsx (로그인 페이지)
 import { useRouter } from "next/navigation";
 import { useState, useContext, ChangeEvent, FormEvent } from "react";
 import axios from "axios";

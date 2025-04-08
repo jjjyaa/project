@@ -1,81 +1,104 @@
-import React, { useState } from "react";
-import { useRouter } from "next/router";
-import { useAuth } from "../context/AuthContext";
+// pages/write.tsx (게시글 작성 페이지)
+import { useContext, useState, ChangeEvent, FormEvent } from "react";
+import { useRouter } from "next/navigation";
 import axios from "axios";
+import { AuthContext } from "@/context/AuthContext";
 
-// 게시글 작성 페이지
-const PostWrite = () => {
-    const { user } = useAuth(); // 로그인된 사용자 정보 가져오기
-    const router = useRouter();
+// 게시글 입력 타입 (상태 관리용)
+interface PostForm {
+  title: string;
+  contents: string;
+}
 
-    const [title, setTitle] = useState<string>('');
-    const [contents, setContents] = useState<string>('');
+export default function PostWritePage() {
+  const router = useRouter();
+  const auth = useContext(AuthContext);
 
-    // 제목 입력 값 처리
-    const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setTitle(e.target.value);
-    };
+  if (!auth) {
+    throw new Error("AuthContext is not provided");
+  }
 
-    // 내용 입력 값 처리
-    const handleContentsChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-        setContents(e.target.value);
-    };
+  const { user } = auth;
 
-  // 폼 제출 시 게시글 작성 요청
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+  const [form, setForm] = useState<PostForm>({
+    title: "",
+    contents: "",
+  });
 
-        if (!title.trim() || !contents.trim()) {
-        alert("제목과 내용을 모두 입력해주세요.");
-        return;
-        }
+  const [file, setFile] = useState<File | null>(null);
 
-        try {
-            const response = await axios.post(
-                "http://localhost:8082/api/boards/", 
-                { 
-                  title, 
-                  contents,
-                  email:user?.email
-                },
-              );
+  // 입력값 처리
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
 
-            alert("게시글 등록 성공");
-            router.push("/"); // 메인 페이지로 이동
-        } catch (error) {
-            alert("게시글 등록 실패");
-            console.error(error);
-        }
-    };
+  // 파일 선택 처리
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setFile(e.target.files[0]);
+    }
+  };
 
-    if (!user) {
-        return <div>로그인이 필요합니다.</div>
+  // 글 작성 제출
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+
+    if (!user || !user.email) {
+      alert("로그인이 필요합니다.");
+      return;
     }
 
-    return (
-        <div style={{ maxWidth: 600, margin: "0 auto", textAlign: "left" }}>
-            <h2>게시글 작성</h2>
-            <form onSubmit={handleSubmit}>
-                    <input
-                        type="text"
-                        name="title"
-                        placeholder="제목을 입력하세요"
-                        value={title}
-                        onChange={handleTitleChange}
-                        style={{ width: "100%", padding: "8px", marginBottom: "10px" }}
-                    />
-                    <textarea
-                        name="contents"
-                        placeholder="내용을 입력하세요"
-                        value={contents}
-                        onChange={handleContentsChange}
-                        rows={10}
-                        style={{ width: "100%", padding: "8px", marginBottom: "10px" }}
-                    />
-                    <button type="submit">등록하기</button>
-            </form>
-        </div>
-  );
-};
+    const formData = new FormData();
+    formData.append("title", form.title);
+    formData.append("contents", form.contents);
+    formData.append("email", user.email);
+    if (file) {
+      formData.append("file", file);
+    }
 
-export default PostWrite;
+    try {
+      await axios.post("http://localhost:8082/api/boards/", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      alert("글 작성 완료!");
+      router.push("/list");
+    } catch (err) {
+      alert("글 작성 실패");
+      console.error(err);
+    }
+  };
+
+  return (
+    <div style={{ maxWidth: 600, margin: "0 auto" }}>
+      <h2>✍️ 게시글 작성</h2>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          name="title"
+          value={form.title}
+          onChange={handleChange}
+          placeholder="제목을 입력하세요"
+          style={{ width: "100%", marginBottom: "10px", padding: "8px" }}
+        />
+        <textarea
+          name="contents"
+          value={form.contents}
+          onChange={handleChange}
+          placeholder="내용을 입력하세요"
+          rows={10}
+          style={{ width: "100%", marginBottom: "10px", padding: "8px" }}
+        />
+        <input
+          type="file"
+          onChange={handleFileChange}
+          accept="image/*"
+          style={{ marginBottom: "10px" }}
+        />
+        <button type="submit">등록</button>
+      </form>
+    </div>
+  );
+}
