@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { AuthContext } from "@/context/AuthContext";
 
-// 게시글 입력 타입 (상태 관리용)
+// 게시글 입력 타입
 interface PostForm {
   title: string;
   contents: string;
@@ -55,7 +55,7 @@ export default function PostWritePage() {
     formData.append("email", user.email);
     if (file) {
       formData.append("file", file);
-    }
+    } 
 
     try {
       await axios.post("http://localhost:8082/api/boards/", formData, {
@@ -64,7 +64,7 @@ export default function PostWritePage() {
         },
       });
       alert("글 작성 완료!");
-      router.push("/list");
+      router.push("/postList");
     } catch (err) {
       alert("글 작성 실패");
       console.error(err);

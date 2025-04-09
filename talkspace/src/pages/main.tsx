@@ -22,7 +22,7 @@ export default function MainPage() {
 
   // 글쓰기 페이지 이동
   const goToWrite = () => {
-    router.push("/write");
+    router.push("/postWrite");
   };
 
   return (
