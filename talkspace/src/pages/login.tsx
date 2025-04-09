@@ -3,6 +3,8 @@ import { useRouter } from "next/navigation";
 import { useState, useContext, ChangeEvent, FormEvent } from "react";
 import axios from "axios";
 import { AuthContext } from "@/context/AuthContext";
+import Layout from "@/components/Layout";
+import styled from "styled-components";
 
 // 1. 타입 정의
 interface LoginForm {
@@ -49,24 +51,74 @@ export default function LoginPage() {
 
   // 6. 렌더링
   return (
-    <div style={{ maxWidth: 400, margin: "0 auto" }}>
-      <h2>로그인</h2>
+    <Layout>
+    <Container>
+    <LoginBox>
+      <Title> 로그인</Title>
       <form onSubmit={handleSubmit}>
-        <input
+        <Input
           name="email"
           type="email"
           placeholder="이메일"
           onChange={handleChange}
-        /><br />
-        <input
+        />
+        <Input
           name="password"
           type="password"
           placeholder="비밀번호"
           onChange={handleChange}
-        /><br />
+        />
         <hr />
-        <button type="submit">로그인</button>
+        <Button type="submit">로그인</Button>
       </form>
-    </div>
+    </LoginBox>
+    </Container>
+    </Layout>
   );
 }
+
+// 스타일 컴포넌트 정의
+const Container = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60vh;
+`;
+
+const LoginBox = styled.div`
+  width: 350px;
+  padding: 4rem;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  background-color: #fff;
+`;
+
+const Title = styled.h2`
+  text-align: center;
+  margin-bottom: 2rem;
+`;
+
+const Input = styled.input`
+  width: 90%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+`;
+
+const Button = styled.button`
+  width: 90%;
+  padding: 0.75rem;
+  background-color: #4f46e5;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #4338ca;
+  }
+`;

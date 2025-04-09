@@ -10,9 +10,8 @@ interface Post {
   contents: string;
   createdDatetime: string;
   hitCnt: number;
-  member: {
-    name: string;
-  };
+  name: string;
+  
 }
 
 export default function PostDetailPage({ params }: { params: { id: string } }) {
@@ -38,7 +37,7 @@ export default function PostDetailPage({ params }: { params: { id: string } }) {
   return (
     <div style={{ maxWidth: 600, margin: "0 auto", textAlign: "left" }}>
       <h2>제목: {post.title}</h2>
-      <p><strong>작성자:</strong> {post.member.name}</p>
+      <p><strong>작성자:</strong> {post.name}</p>
       <p><strong>작성일:</strong> {post.createdDatetime}</p>
       <p><strong>조회수:</strong> {post.hitCnt}</p>
       <hr />

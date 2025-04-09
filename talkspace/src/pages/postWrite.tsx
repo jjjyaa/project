@@ -4,6 +4,9 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { AuthContext } from "@/context/AuthContext";
 
+import Layout from "@/components/Layout";
+import styled from "styled-components";
+
 // 게시글 입력 타입
 interface PostForm {
   title: string;
@@ -50,12 +53,21 @@ export default function PostWritePage() {
     }
 
     const formData = new FormData();
-    formData.append("title", form.title);
-    formData.append("contents", form.contents);
-    formData.append("email", user.email);
+    formData.append(
+      "dto",
+      new Blob(
+        [JSON.stringify({
+          title: form.title,
+          contents: form.contents,
+          email: user.email,
+        })],
+        { type: "application/json" }
+      )
+    );
+    
     if (file) {
       formData.append("file", file);
-    } 
+    }
 
     try {
       await axios.post("http://localhost:8082/api/boards/", formData, {
@@ -72,33 +84,88 @@ export default function PostWritePage() {
   };
 
   return (
-    <div style={{ maxWidth: 600, margin: "0 auto" }}>
-      <h2>✍️ 게시글 작성</h2>
+    <Layout>
+    <Container>
+    <Title>글 등록하기</Title> 
       <form onSubmit={handleSubmit}>
-        <input
-          type="text"
+        <TitleInput
           name="title"
           value={form.title}
           onChange={handleChange}
           placeholder="제목을 입력하세요"
-          style={{ width: "100%", marginBottom: "10px", padding: "8px" }}
         />
-        <textarea
+        <ContentArea
           name="contents"
           value={form.contents}
           onChange={handleChange}
           placeholder="내용을 입력하세요"
-          rows={10}
-          style={{ width: "100%", marginBottom: "10px", padding: "8px" }}
         />
-        <input
+        <FileInput
           type="file"
           onChange={handleFileChange}
           accept="image/*"
-          style={{ marginBottom: "10px" }}
         />
-        <button type="submit">등록</button>
+        <Button type="submit">등록</Button>
       </form>
-    </div>
+    </Container>
+    </Layout>
   );
 }
+
+// 스타일 정의
+const Container = styled.div`
+  max-width: 700px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+`;
+const Title = styled.h2`
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #333;
+`;
+
+
+const TitleInput = styled.input`
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+`;
+
+const ContentArea = styled.textarea`
+  width: 100%;
+  height: 300px;
+  padding: 1rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  resize: vertical;
+  margin-bottom: 1rem;
+`;
+
+const FileInput = styled.input`
+  margin-bottom: 1rem;
+`;
+
+const Button = styled.button`
+  display: block;
+  margin-left: auto;
+  padding: 0.75rem 1.5rem;
+  background-color: #4f46e5;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #4338ca;
+  }
+`;

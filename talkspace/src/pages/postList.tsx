@@ -9,9 +9,7 @@ interface Post {
   title: string;
   createdDatetime: string;
   hitCnt: number;
-  member: {
-    name: string;
-  };
+  name: string;
 }
 
 export default function PostListPage() {
@@ -37,7 +35,7 @@ export default function PostListPage() {
       <h2>📋 게시글 목록</h2>
 
       <button
-        onClick={() => router.push("/write")}
+        onClick={() => router.push("/postWrite")}
         style={{ marginBottom: "10px" }}
       >
         게시글 등록
@@ -65,7 +63,7 @@ export default function PostListPage() {
               >
                 {post.title}
               </td>
-              <td>{post.member.name}</td>
+              <td>{post.name}</td>
               <td>{post.createdDatetime}</td>
               <td>{post.hitCnt}</td>
             </tr>

@@ -45,17 +45,28 @@ export default function PostEditPage() {
   // 수정 요청
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    try {
-      await axios.patch(`http://localhost:8082/api/boards/${id}/update`, {
-        title: form.title,
-        contents: form.contents,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
+    const formData = new FormData();
+    formData.append(
+      "dto",
+      new Blob(
+        [
+          JSON.stringify({
+            title: form.title,
+            contents: form.contents,
+          }),
+        ],
+        { type: "application/json" }
+      )
     );
+    try {
+      await axios.patch(`http://localhost:8082/api/boards/${id}/update`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
       alert("게시글이 수정되었습니다!");
       router.push(`/post/${id}`);
     } catch (err) {
