@@ -1,9 +1,9 @@
-// pages/edit/[id].tsx (게시글 수정 페이지)
 import { useRouter } from "next/router";
 import { useEffect, useState, ChangeEvent, FormEvent } from "react";
 import axios from "axios";
 
 import styled from "styled-components";
+import { useAuth } from "@/context/AuthContext";
 
 // 게시글 타입 정의
 interface Post {
@@ -15,6 +15,7 @@ interface Post {
 export default function PostEditPage() {
   const router = useRouter();
   const { id } = router.query;
+  const { user } = useAuth();
 
   const [form, setForm] = useState<Post>({
     boardId: 0,
@@ -22,21 +23,25 @@ export default function PostEditPage() {
     contents: "",
   });
 
+  const [errorMessage, setErrorMessage] = useState<string>(""); // 에러 메시지 상태 추가
+
   // 수정 전 기존 데이터 불러오기
   useEffect(() => {
-    if (!id) return;
+    if (!id) return;  // id가 없으면 함수 종료
 
-    axios
-      .get(`http://localhost:8082/api/boards/${id}`)
-      .then((res) => {
+    const fetchBoardData = async () => {
+      try {
+        const res = await axios.get(`http://localhost:8082/api/boards/${id}`);
         const { boardId, title, contents } = res.data;
         setForm({ boardId, title, contents });
-      })
-      .catch((err) => {
+      } catch (err) {
         alert("게시글 정보를 불러오는 데 실패했습니다.");
         router.push("/postList");
-      });
-  }, [id]);
+      }
+    };
+
+    fetchBoardData();
+  }, [id, setForm, router]);
 
   // 입력값 변경 핸들러
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -55,25 +60,28 @@ export default function PostEditPage() {
           JSON.stringify({
             title: form.title,
             contents: form.contents,
+            email: user?.email
           }),
         ],
         { type: "application/json" }
       )
     );
     try {
-      await axios.patch(`http://localhost:8082/api/boards/${id}/update`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      await axios.patch(`http://localhost:8082/api/boards/${id}/update`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       alert("게시글이 수정되었습니다!");
       router.push(`/post/${id}`);
-    } catch (err) {
-      console.error("수정 실패", err);
-      alert("게시글 수정에 실패했습니다.");
+    } catch (err:any) {
+      // 400 에러 처리
+      if (err.response && err.response.data) {
+        setErrorMessage(err.response.data);  // 서버에서 반환한 에러 메시지 상태에 저장
+        alert(errorMessage);
+      } else {
+        alert(errorMessage);
+      }
     }
   };
 
@@ -102,7 +110,6 @@ export default function PostEditPage() {
     </Card>
   );
 }
-
 
 // 스타일
 const Card = styled.div`
@@ -154,4 +161,10 @@ const Button = styled.button`
   &:hover {
     background-color: #4338ca;
   }
+`;
+
+const ErrorMessage = styled.div`
+  color: red;
+  font-size: 14px;
+  margin-top: 10px;
 `;

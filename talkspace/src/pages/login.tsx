@@ -1,8 +1,8 @@
 // pages/login.tsx (로그인 페이지)
 import { useRouter } from "next/navigation";
-import { useState, useContext, ChangeEvent, FormEvent } from "react";
+import { useState, ChangeEvent, FormEvent } from "react";
 import axios from "axios";
-import { AuthContext } from "@/context/AuthContext";
+import { useAuth } from "@/context/AuthContext";
 import styled from "styled-components";
 
 // 1. 타입 정의
@@ -13,14 +13,7 @@ interface LoginForm {
 
 export default function LoginPage() {
   const router = useRouter();
-  const auth = useContext(AuthContext);
-
-  // 2. context 없을 경우 예외 처리
-  if (!auth) {
-    throw new Error("AuthContext is not provided");
-  }
-
-  const { login } = auth;
+  const { login } = useAuth()
 
   // 3. 상태 초기화
   const [form, setForm] = useState<LoginForm>({
@@ -41,7 +34,7 @@ export default function LoginPage() {
       const res = await axios.post("http://localhost:8082/api/members/login", form);
       alert("로그인 성공");
       login(res.data);
-      router.push("/main");
+      router.push("/");
     } catch (err) {
       alert("로그인 실패");
       console.error(err);

@@ -1,8 +1,8 @@
-// pages/postList.tsx (게시글 목록)
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import styled from "styled-components";
+import SearchBar from "@/components/search";
 
 // 게시글 타입 정의
 interface Post {
@@ -14,30 +14,43 @@ interface Post {
 }
 
 export default function PostListPage() {
-  const router = useRouter(); 
+  const router = useRouter();
   const [posts, setPosts] = useState<Post[]>([]); // 게시글 목록 상태
+  const [searchTerm, setSearchTerm] = useState(""); // 검색어 상태
+  const [searchCategory, setSearchCategory] = useState("title"); // 검색 카테고리 상태
 
   // 게시글 목록 가져오기
   useEffect(() => {
-    axios
-      .get("http://localhost:8082/api/boards/")
-      .then((res) => {
-        if (Array.isArray(res.data)) {
-          setPosts(res.data);
+    const fetchPosts = async () => {
+      try {
+        const response = await axios.get("http://localhost:8082/api/boards/search", {
+          params: {
+            searchTerm,
+            searchType: searchCategory,
+          },
+        });
+        if (Array.isArray(response.data)) {
+          setPosts(response.data);
         }
-      })
-      .catch((err) => {
-        console.error("게시글 목록 불러오기 실패:", err);
-      });
-  }, []);
+      } catch (error) {
+        console.error("게시글 목록 불러오기 실패:", error);
+      }
+    };
+
+    fetchPosts();
+  }, [searchTerm, searchCategory]); // 검색어 또는 카테고리가 변경될 때마다 API 호출
+
+  // 검색어와 카테고리 변경 시 부모 상태를 업데이트하는 함수
+  const handleSearch = (term: string, category: string) => {
+    setSearchTerm(term);
+    setSearchCategory(category);
+  };
 
   return (
     <Container>
       <Title>📋 게시글 목록</Title>
-      <WriteButton onClick={() => router.push("/postWrite")}>
-        게시글 등록
-      </WriteButton>
-
+        <WriteButton onClick={() => router.push("/postWrite")}>게시글 등록</WriteButton>
+        <SearchBar onSearch={handleSearch} />
       <Table>
         <thead>
           <tr>
@@ -60,7 +73,7 @@ export default function PostListPage() {
           ))}
         </tbody>
       </Table>
-      </Container>
+    </Container>
   );
 }
 

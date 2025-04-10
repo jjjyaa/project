@@ -12,6 +12,11 @@ const Wrapper = styled.div`
 display: flex; 
 flex-direction: column;
 min-height: 100vh;
+text-align: center;
+background-image: url("/a.jpg");
+background-size: cover;
+background-position: center; 
+background-repeat: no-repeat;
 `;
 
 // 상단 고정 헤더
@@ -73,9 +78,6 @@ svg:hover {
 
 // Hero 이미지 배너
 const Hero = styled.section`
-background-image: url("/a.jpg");
-background-size: cover;
-background-position: center;
 height: 200px;
 display: flex;
 align-items: center;
