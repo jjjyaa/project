@@ -3,6 +3,8 @@ import { useRouter } from "next/router";
 import { useEffect, useState, ChangeEvent, FormEvent } from "react";
 import axios from "axios";
 
+import styled from "styled-components";
+
 // 게시글 타입 정의
 interface Post {
   boardId: number;
@@ -76,10 +78,10 @@ export default function PostEditPage() {
   };
 
   return (
-    <div style={{ maxWidth: 600, margin: "0 auto" }}>
-      <h2>게시글 수정</h2>
+    <Card>
+      <Title>게시글 수정</Title>
       <form onSubmit={handleSubmit}>
-        <input
+        <Input
           type="text"
           name="title"
           value={form.title}
@@ -87,7 +89,7 @@ export default function PostEditPage() {
           placeholder="제목"
           style={{ width: "100%", marginBottom: "10px", padding: "8px" }}
         />
-        <textarea
+        <Textarea
           name="contents"
           value={form.contents}
           onChange={handleChange}
@@ -95,8 +97,61 @@ export default function PostEditPage() {
           rows={10}
           style={{ width: "100%", marginBottom: "10px", padding: "8px" }}
         />
-        <button type="submit">수정 완료</button>
+        <Button type="submit">수정 완료</Button>
       </form>
-    </div>
+    </Card>
   );
 }
+
+
+// 스타일
+const Card = styled.div`
+  max-width: 700px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+`;
+
+const Title = styled.h2`
+  font-size: 1.6rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 2rem;
+`;
+
+const Input = styled.input`
+  width: 100%;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+`;
+
+const Textarea = styled.textarea`
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.05rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  resize: vertical;
+  margin-bottom: 1.5rem;
+`;
+
+const Button = styled.button`
+  display: block;
+  margin-left: auto;
+  padding: 0.75rem 1.5rem;
+  background-color: #4f46e5;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #4338ca;
+  }
+`;

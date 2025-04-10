@@ -4,7 +4,6 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { AuthContext } from "@/context/AuthContext";
 
-import Layout from "@/components/Layout";
 import styled from "styled-components";
 
 // 게시글 입력 타입
@@ -84,7 +83,6 @@ export default function PostWritePage() {
   };
 
   return (
-    <Layout>
     <Container>
     <Title>글 등록하기</Title> 
       <form onSubmit={handleSubmit}>
@@ -108,7 +106,6 @@ export default function PostWritePage() {
         <Button type="submit">등록</Button>
       </form>
     </Container>
-    </Layout>
   );
 }
 

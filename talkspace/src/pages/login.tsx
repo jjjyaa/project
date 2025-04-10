@@ -3,7 +3,6 @@ import { useRouter } from "next/navigation";
 import { useState, useContext, ChangeEvent, FormEvent } from "react";
 import axios from "axios";
 import { AuthContext } from "@/context/AuthContext";
-import Layout from "@/components/Layout";
 import styled from "styled-components";
 
 // 1. 타입 정의
@@ -51,7 +50,6 @@ export default function LoginPage() {
 
   // 6. 렌더링
   return (
-    <Layout>
     <Container>
     <LoginBox>
       <Title> 로그인</Title>
@@ -73,11 +71,10 @@ export default function LoginPage() {
       </form>
     </LoginBox>
     </Container>
-    </Layout>
   );
 }
 
-// 스타일 컴포넌트 정의
+// 스타일
 const Container = styled.div`
   display: flex;
   justify-content: center;

@@ -3,9 +3,7 @@ import { useContext } from "react";
 import { useRouter } from "next/navigation";
 import { AuthContext } from "@/context/AuthContext";
 
-import Layout from "@/components/Layout";
 import styled from "styled-components";
-
 
 
 export default function MainPage() {
@@ -31,7 +29,6 @@ export default function MainPage() {
   };
 
   return (
-    <Layout>
     <Wrapper>
       <Welcome>
         {user ? `${user.name}님, 환영합니다!` : "로그인 정보 없음"}
@@ -41,7 +38,6 @@ export default function MainPage() {
       <Button onClick={handleLogout} style={{ marginLeft: "10px" }}>로그아웃</Button>
       </ButtonGroup>
     </Wrapper>
-    </Layout>
   );
 }
 

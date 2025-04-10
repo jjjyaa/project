@@ -2,7 +2,6 @@
 import { useState, ChangeEvent, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import Layout from "@/components/Layout";
 import styled from "styled-components";
 
 // 1. 회원가입 폼 타입 정의
@@ -51,7 +50,6 @@ export default function SignupPage() {
 
   // 5. JSX 출력
   return (
-    <Layout>
       <Container>
       <SignupBox>
     <div style={{ maxWidth: 400, margin: "0 auto" }}>
@@ -68,7 +66,6 @@ export default function SignupPage() {
     </div>
     </SignupBox>
     </Container>
-    </Layout>
   );
 }
 
