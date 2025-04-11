@@ -5,6 +5,8 @@ import axios from "axios";
 import styled from "styled-components";
 import { useAuth } from "@/context/AuthContext";
 
+import CommentSection from "@/components/CommentSection";
+
 // 게시글 타입
 interface Post {
   boardId: number;
@@ -39,7 +41,6 @@ export default function PostDetailPage({ params }: { params: { id: string } }) {
         router.push("/postList");
       }
     };
-  
     fetchPost();
   }, [id]);
 
@@ -97,6 +98,9 @@ export default function PostDetailPage({ params }: { params: { id: string } }) {
         )}
         <Button onClick={() => router.push("/postList")}>목록으로</Button>
       </ButtonBox>
+
+      <CommentSection boardId={post.boardId} />
+      
     </Card>
   );
 }
