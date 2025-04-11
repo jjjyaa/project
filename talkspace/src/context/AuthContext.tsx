@@ -14,7 +14,7 @@ interface AuthContextType {
 }
 
 // Context 생성 (기본값을 설정하여 undefined를 방지)
-export const AuthContext = createContext<AuthContextType | undefined>(undefined);
+export const AuthContext = createContext<AuthContextType | null>(null); // 초기값을 null로 설정
 
 // Context Provider 컴포넌트 정의
 interface AuthProviderProps {
@@ -35,7 +35,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   // 로그인 함수
   const login = (userData: User) => {
     setUser(userData);
-    localStorage.setItem('user', JSON.stringify(userData.email));
+    localStorage.setItem('user', JSON.stringify(userData));
   };
 
   // 로그아웃 함수
@@ -56,7 +56,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 export function useAuth() {
   const context = useContext(AuthContext);
 
-  if (!context) {
+  if (context === null) { // context가 null일 때 에러를 던지도록 변경
     throw new Error('useAuth must be used within an AuthProvider');
   }
 

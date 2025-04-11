@@ -33,7 +33,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
             value={searchCategory}
             onChange={handleCategoryChange}
           >
-            <option value="통합">통합검색</option>
+            <option value="all">통합검색</option>
             <option value="title">제목</option>
             <option value="email">작성자</option>
           </SearchSelectbox>

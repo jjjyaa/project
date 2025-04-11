@@ -15,42 +15,46 @@ interface Post {
 
 export default function PostListPage() {
   const router = useRouter();
-  const [posts, setPosts] = useState<Post[]>([]); // 게시글 목록 상태
-  const [searchTerm, setSearchTerm] = useState(""); // 검색어 상태
-  const [searchCategory, setSearchCategory] = useState("title"); // 검색 카테고리 상태
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchCategory, setSearchCategory] = useState("title");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
-  // 게시글 목록 가져오기
   useEffect(() => {
     const fetchPosts = async () => {
       try {
         const response = await axios.get("http://localhost:8082/api/boards/search", {
           params: {
             searchTerm,
-            searchType: searchCategory,
+            searchType: searchCategory === "통합" ? "all" : searchCategory,
+            page: currentPage ,
+            size: 10,
           },
         });
-        if (Array.isArray(response.data)) {
-          setPosts(response.data);
-        }
+
+        const data = response.data;
+        setPosts(data.content);
+        setTotalPages(data.totalPages);
       } catch (error) {
         console.error("게시글 목록 불러오기 실패:", error);
       }
     };
 
     fetchPosts();
-  }, [searchTerm, searchCategory]); // 검색어 또는 카테고리가 변경될 때마다 API 호출
+  }, [searchTerm, searchCategory, currentPage]);
 
-  // 검색어와 카테고리 변경 시 부모 상태를 업데이트하는 함수
   const handleSearch = (term: string, category: string) => {
     setSearchTerm(term);
     setSearchCategory(category);
+    setCurrentPage(1); // 검색 시 첫 페이지로
   };
 
   return (
     <Container>
       <Title>📋 게시글 목록</Title>
-        <WriteButton onClick={() => router.push("/postWrite")}>게시글 등록</WriteButton>
-        <SearchBar onSearch={handleSearch} />
+      <WriteButton onClick={() => router.push("/postWrite")}>게시글 등록</WriteButton>
+      <SearchBar onSearch={handleSearch} />
       <Table>
         <thead>
           <tr>
@@ -61,23 +65,47 @@ export default function PostListPage() {
           </tr>
         </thead>
         <tbody>
-          {posts.map((post) => (
-            <tr key={post.boardId}>
-              <td onClick={() => router.push(`/post/${post.boardId}`)}>
-                {post.title}
-              </td>
-              <td>{post.name}</td>
-              <td>{post.createdDatetime}</td>
-              <td>{post.hitCnt}</td>
+          {posts.length > 0 ? (
+            posts.map((post) => (
+              <tr key={post.boardId}>
+                <td onClick={() => router.push(`/post/${post.boardId}`)}>{post.title}</td>
+                <td>{post.name}</td>
+                <td>{post.createdDatetime}</td>
+                <td>{post.hitCnt}</td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan={4}>게시글이 없습니다.</td>
             </tr>
-          ))}
+          )}
         </tbody>
       </Table>
+
+      {totalPages > 1 && (
+        <Pagination>
+          <PageButton onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))} disabled={currentPage === 1}>
+            ◀ 이전
+          </PageButton>
+          {[...Array(totalPages)].map((_, index) => (
+            <PageButton
+              key={index}
+              active={currentPage === index + 1}
+              onClick={() => setCurrentPage(index + 1)}
+            >
+              {index + 1}
+            </PageButton>
+          ))}
+          <PageButton onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))} disabled={currentPage === totalPages}>
+            다음 ▶
+          </PageButton>
+        </Pagination>
+      )}
     </Container>
   );
 }
 
-// 스타일
+// Styled Components
 const Container = styled.div`
   max-width: 900px;
   margin: 2rem auto;
@@ -140,5 +168,31 @@ const Table = styled.table`
 
   tr:hover {
     background-color: #f3f4f6;
+  }
+`;
+
+const Pagination = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+  gap: 0.4rem;
+`;
+
+const PageButton = styled.button<{ active?: boolean }>`
+  padding: 0.4rem 0.8rem;
+  border: 1px solid #d1d5db;
+  background-color: ${({ active }) => (active ? "#4f46e5" : "#fff")};
+  color: ${({ active }) => (active ? "#fff" : "#111827")};
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: ${({ active }) => (active ? "bold" : "normal")};
+
+  &:hover:not(:disabled) {
+    background-color: ${({ active }) => (active ? "#4338ca" : "#f3f4f6")};
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
   }
 `;
