@@ -7,7 +7,7 @@ interface Comment {
     commentId: number;
     boardId: number;
     content: string;
-    email: string;
+    name: string;
     createdDatetime: string;
   }
 
@@ -95,8 +95,8 @@ interface Comment {
         {comments.map((c) => (
           <CommentItem key={c.commentId}>
             <CommentHeader>
-              <strong>{c.email}</strong>
-              {user?.email === c.email && editingId !== c.commentId && (
+              <strong>{c.name}</strong>
+              {user?.name === c.name && editingId !== c.commentId && (
                 <ActionButtons>
                   <button
                     onClick={() => {

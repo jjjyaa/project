@@ -6,6 +6,7 @@ import styled from "styled-components";
 import { useAuth } from "@/context/AuthContext";
 
 import CommentSection from "@/components/CommentSection";
+import Image from "next/image";
 
 // 게시글 타입
 interface Post {
@@ -76,14 +77,14 @@ export default function PostDetailPage({ params }: { params: { id: string } }) {
           <ul>
             {post.files.map((file, idx) => (
               <li key={idx}>
-                <a
-                  href={`http://localhost:8082/uploads/${file.storedFilePath}`}
-                  download
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {file.originalFileName}
-                </a>
+<Image
+  src={`http://localhost:8082/uploads/${file.storedFilePath}`}
+  alt={file.originalFileName}
+  width={600} // 원하는 가로 사이즈
+  height={400} // 원하는 세로 사이즈
+  style={{ objectFit: "contain" }} // 이미지 비율 유지
+/>
+
               </li>
             ))}
           </ul>
@@ -100,7 +101,7 @@ export default function PostDetailPage({ params }: { params: { id: string } }) {
       </ButtonBox>
 
       <CommentSection boardId={post.boardId} />
-      
+
     </Card>
   );
 }
