@@ -28,22 +28,31 @@ export default function PostDetailPage({ params }: { params: { id: string } }) {
   const { user } = useAuth();  // 현재 로그인된 user 정보 가져오기
   const { id } = router.query;
 
-  // 게시글 불러오기
+  const [liked, setLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(0);
+
+  // 게시글 불러오기 + 좋아요 상태
   useEffect(() => {
-    if (!id) return;
-  
-    const fetchPost = async () => {
+    if (!id || !user?.email) return;
+
+    const fetchData = async () => {
       try {
         const res = await axios.get(`http://localhost:8082/api/boards/${id}`);
         setPost(res.data);
+
+        const statusRes = await axios.get(`http://localhost:8082/api/likes/${id}/status?email=${user.email}`);
+        setLiked(statusRes.data);
+
+        const countRes = await axios.get(`http://localhost:8082/api/likes/${id}/count`);
+        setLikeCount(countRes.data);
       } catch (err) {
         console.error(err);
         alert("존재하지 않는 게시글입니다.");
         router.push("/postList");
       }
     };
-    fetchPost();
-  }, [id]);
+    fetchData();
+  }, [id, user?.email]);
 
   // 게시글 삭제
   const handleDelete = async () => {
@@ -59,6 +68,23 @@ export default function PostDetailPage({ params }: { params: { id: string } }) {
     }
   };
 
+  // 좋아요 기능
+  const handleToggleLike = async () => {
+    if (!user?.email) return alert("로그인이 필요합니다.");
+    try {
+      const res = await axios.post(`http://localhost:8082/api/likes/${id}?email=${user.email}`);
+      if (res.data === "좋아요 등록") {
+        setLiked(true);
+        setLikeCount((prev) => prev + 1);
+      } else {
+        setLiked(false);
+        setLikeCount((prev) => prev - 1);
+      }
+    } catch (error) {
+      console.error("좋아요 토글 실패", error);
+    }
+  };
+
   if (!post) return <div>로딩 중...</div>;
 
   return (
@@ -68,6 +94,11 @@ export default function PostDetailPage({ params }: { params: { id: string } }) {
         <span>작성자: {post.name}</span>
         <span>작성일: {post.createdDatetime}</span>
         <span>조회수: {post.hitCnt}</span>
+        <div style={{ marginTop: "1rem" }}>
+        <LikeButton onClick={handleToggleLike} color={liked ? "#ff4d4f" : "#aaa"}>
+          {liked ? "❤️" : "🤍"} {likeCount}
+        </LikeButton>
+      </div>
       </Meta>
       <Divider />
       <Content>{post.contents}</Content>
@@ -77,14 +108,13 @@ export default function PostDetailPage({ params }: { params: { id: string } }) {
           <ul>
             {post.files.map((file, idx) => (
               <li key={idx}>
-<Image
-  src={`http://localhost:8082/uploads/${file.storedFilePath}`}
-  alt={file.originalFileName}
-  width={600} // 원하는 가로 사이즈
-  height={400} // 원하는 세로 사이즈
-  style={{ objectFit: "contain" }} // 이미지 비율 유지
-/>
-
+              <Image
+                src={`http://localhost:8082/uploads/${file.storedFilePath}`}
+                alt={file.originalFileName}
+                width={600} // 원하는 가로 사이즈
+                height={400} // 원하는 세로 사이즈
+                style={{ objectFit: "contain" }} // 이미지 비율 유지
+              />
               </li>
             ))}
           </ul>
@@ -198,5 +228,18 @@ const FileBox = styled.div`
     &:hover {
       color: #4338ca;
     }
+  }
+`;
+
+const LikeButton = styled.button`
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: ${props => props.color || "#ff4d4f"};
+  transition: transform 0.2s;
+
+  &:hover {
+    transform: scale(1.2);
   }
 `;

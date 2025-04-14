@@ -126,7 +126,7 @@ function PostDetail() {
       <p><strong>작성일 : </strong> {post.createdDatetime}</p>
       <p><strong>조회수 :</strong> {post.hitCnt}</p>
       <hr />
-      <p><strong>내용:</strong></p>
+      <p><strong>내용:</strong></p> 
       <p>{post.contents}</p>
       
       {post.fileList && post.fileList.length > 0 && (
