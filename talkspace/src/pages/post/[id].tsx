@@ -40,11 +40,10 @@ export default function PostDetailPage({ params }: { params: { id: string } }) {
         const res = await axios.get(`http://localhost:8082/api/boards/${id}`);
         setPost(res.data);
 
-        const statusRes = await axios.get(`http://localhost:8082/api/likes/${id}/status?email=${user.email}`);
-        setLiked(statusRes.data);
+        const statusRes = await axios.get(`http://localhost:8082/api/likes/${id}/like-status?email=${user.email}`)
+        setLiked(statusRes.data.liked);
+        setLikeCount(statusRes.data.likeCount);
 
-        const countRes = await axios.get(`http://localhost:8082/api/likes/${id}/count`);
-        setLikeCount(countRes.data);
       } catch (err) {
         console.error(err);
         alert("존재하지 않는 게시글입니다.");
