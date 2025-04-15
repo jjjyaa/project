@@ -2,11 +2,7 @@ import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
-
-// 부모 컴포넌트에서 전달받을 콜백 함수의 타입 정의
-interface SearchBarProps {
-  onSearch: (searchTerm: string, searchCategory: string) => void;
-}
+import { SearchBarProps } from "@/types/post-type";
 
 export default function SearchBar({ onSearch }: SearchBarProps) {
   const [searchTerm, setSearchTerm] = useState("");

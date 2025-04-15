@@ -4,8 +4,8 @@ import styled from 'styled-components';
 
 
 interface MainLayoutProps {
-    children: React.ReactNode;
-  }
+  children: React.ReactNode;
+}
 
   // 전체 페이지를 감싸는 래퍼
 const Wrapper = styled.div`
@@ -105,20 +105,20 @@ margin-top: auto;
 
 const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
     return (
-    <Wrapper>
-    <Header>
-      <LogoBox>
-        Project
-      </LogoBox>
-      <Menu>
-        <Link href="/">🏠 Home</Link>
-        <Link href="/postList">📋 게시판</Link>
-      </Menu>
-    </Header>
-    <Hero></Hero>
-    <Main>{children}</Main>
-    <Footer>© 2025 Project Team</Footer>
-  </Wrapper>
+      <Wrapper>
+        <Header>
+          <LogoBox>
+            Project
+          </LogoBox>
+          <Menu>
+            <Link href="/">🏠 Home</Link>
+            <Link href="/postList">📋 게시판</Link>
+          </Menu>
+        </Header>
+        <Hero></Hero>
+        <Main>{children}</Main>
+        <Footer>© 2025 Project Team</Footer>
+      </Wrapper>
     );
 };
 

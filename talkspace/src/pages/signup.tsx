@@ -3,15 +3,7 @@ import { useState, ChangeEvent, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import styled from "styled-components";
-
-// 1. 회원가입 폼 타입 정의
-interface SignupForm {
-  email: string;
-  password: string;
-  name: string;
-  phone: string;
-  address: string;
-}
+import { SignupForm } from "@/types/member-type";
 
 export default function SignupPage() {
   const router = useRouter();

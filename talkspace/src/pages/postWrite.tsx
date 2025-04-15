@@ -1,16 +1,9 @@
-// pages/write.tsx (게시글 작성 페이지)
 import { useContext, useState, ChangeEvent, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { AuthContext } from "@/context/AuthContext";
-
 import styled from "styled-components";
-
-// 게시글 입력 타입
-interface PostForm {
-  title: string;
-  contents: string;
-}
+import { PostForm } from "@/types/post-type";
 
 export default function PostWritePage() {
   const router = useRouter();
@@ -34,6 +27,7 @@ export default function PostWritePage() {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
+ 
 
   // 파일 선택 처리
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {

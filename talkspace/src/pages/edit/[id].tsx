@@ -1,23 +1,16 @@
 import { useRouter } from "next/router";
 import { useEffect, useState, ChangeEvent, FormEvent } from "react";
 import axios from "axios";
-
 import styled from "styled-components";
 import { useAuth } from "@/context/AuthContext";
-
-// 게시글 타입 정의
-interface Post {
-  boardId: number;
-  title: string;
-  contents: string;
-}
+import { EditPost } from "@/types/post-type";
 
 export default function PostEditPage() {
   const router = useRouter();
   const { id } = router.query;
   const { user } = useAuth();
 
-  const [form, setForm] = useState<Post>({
+  const [form, setForm] = useState<EditPost>({
     boardId: 0,
     title: "",
     contents: "",

@@ -1,30 +1,16 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
-
 import styled from "styled-components";
 import { useAuth } from "@/context/AuthContext";
-
 import CommentSection from "@/components/CommentSection";
 import Image from "next/image";
+import { DeatilPost } from "@/types/post-type";
 
-// 게시글 타입
-interface Post {
-  boardId: number;
-  title: string;
-  contents: string;
-  createdDatetime: string;
-  hitCnt: number;
-  name: string;
-  files?: {
-    originalFileName: string;
-    storedFilePath: string;
-  }[];
-}
 
 export default function PostDetailPage({ params }: { params: { id: string } }) {
   const router = useRouter();
-  const [post, setPost] = useState<Post | null>(null);
+  const [post, setPost] = useState<DeatilPost | null>(null);
   const { user } = useAuth();  // 현재 로그인된 user 정보 가져오기
   const { id } = router.query;
 

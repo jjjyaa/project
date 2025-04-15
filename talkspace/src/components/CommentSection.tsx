@@ -2,27 +2,15 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import { useAuth } from "@/context/AuthContext";
+import { Comment, CommentSectionProps } from "@/types/post-type";
 
-interface Comment {
-    commentId: number;
-    boardId: number;
-    content: string;
-    name: string;
-    createdDatetime: string;
-  }
-
-  interface CommentSectionProps {
-    boardId: number;
-  }
+export default function CommentSection({ boardId }: CommentSectionProps) {
+  const { user } = useAuth();
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [newComment, setNewComment] = useState("");
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [editingContent, setEditingContent] = useState("");
   
-  export default function CommentSection({ boardId }: CommentSectionProps) {
-    const { user } = useAuth();
-    const [comments, setComments] = useState<Comment[]>([]);
-    const [newComment, setNewComment] = useState("");
-    const [editingId, setEditingId] = useState<number | null>(null);
-    const [editingContent, setEditingContent] = useState("");
-  
-
   // 댓글 목록 불러오기
   const fetchComments = async () => {
     try {

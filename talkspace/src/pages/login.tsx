@@ -4,12 +4,7 @@ import { useState, ChangeEvent, FormEvent } from "react";
 import axios from "axios";
 import { useAuth } from "@/context/AuthContext";
 import styled from "styled-components";
-
-// 1. 타입 정의
-interface LoginForm {
-  email: string;
-  password: string;
-}
+import { LoginForm } from "@/types/member-type";
 
 export default function LoginPage() {
   const router = useRouter();

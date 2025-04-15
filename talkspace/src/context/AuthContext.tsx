@@ -1,22 +1,5 @@
+import { AuthContextType, AuthProviderProps, User } from '@/types/member-type';
 import React, { useState, useContext, ReactNode, createContext, useEffect } from 'react';
-
-// 사용자 정보 타입 정의
-type User = {
-  email: string;
-  name: string;
-};
-// Context Provider 컴포넌트 정의
-interface AuthProviderProps {
-  children: ReactNode;
-}
-
-// Context 값의 타입 정의
-interface AuthContextType {
-  user: User | null;
-  login: (userData: User) => void;
-  logout: () => void;
-  loading: boolean;
-}
 
 export const AuthContext = createContext<AuthContextType | null>(null);
 

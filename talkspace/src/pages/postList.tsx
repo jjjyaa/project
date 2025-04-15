@@ -3,19 +3,11 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import styled from "styled-components";
 import SearchBar from "@/components/search";
-
-// 게시글 타입 정의
-interface Post {
-  boardId: number;
-  title: string;
-  createdDatetime: string;
-  hitCnt: number;
-  name: string;
-}
+import { PostList } from "@/types/post-type";
 
 export default function PostListPage() {
   const router = useRouter();
-  const [posts, setPosts] = useState<Post[]>([]);
+  const [posts, setPosts] = useState<PostList[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchCategory, setSearchCategory] = useState("title");
   const [currentPage, setCurrentPage] = useState(1);
