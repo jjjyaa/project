@@ -54,7 +54,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
 const SearchSection = styled.div`
   display: flex;
   justify-content: flex-end;
-  padding: 20px;
+  padding: 10px;
   width: 100%;
   flex-grow: 1;
 `;
@@ -62,10 +62,10 @@ const SearchSection = styled.div`
 const SearchBox = styled.form`
   width: 300px;
   height: 40px;
-  background: white;
+  background: ${({ theme }) => theme.colors.white};
   border-radius: 40px;
   padding: 1px;
-  border: 1px solid #0093ff;
+  border: 1px solid ${({ theme }) => theme.colors.primary};
   position: relative;
   display: flex;
   align-items: center;
@@ -102,7 +102,7 @@ const SearchText = styled.input`
 `;
 
 const SearchButton = styled.button`
-  color: #0093ff;
+  color: black;
   width: 40px;
   height: 100%;
   border-radius: 50%;

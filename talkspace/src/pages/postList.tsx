@@ -44,8 +44,12 @@ export default function PostListPage() {
 
   return (
     <Container>
-      <Title>📋 게시글 목록</Title>
-      <WriteButton onClick={() => router.push("/postWrite")}>게시글 등록</WriteButton>
+      <Title>게시글 목록</Title>
+      <WriteButtonWrapper>
+     <WriteButton onClick={() => router.push("/postWrite")}>
+          게시글 등록
+    </WriteButton>
+    </WriteButtonWrapper>
       <SearchBar onSearch={handleSearch} />
       <Table>
         <thead>
@@ -99,92 +103,109 @@ export default function PostListPage() {
 
 // Styled Components
 const Container = styled.div`
-  max-width: 900px;
+  max-width: 1100px; /* 넓은 레이아웃 */
   margin: 2rem auto;
-  padding: 2rem;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  padding: 2.5rem;
+  background: ${({ theme }) => theme.colors.white};
+  border-radius: 16px; 
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06); 
 `;
 
 const Title = styled.h2`
-  font-size: 1.6rem;
+  text-align: center;
+  font-size: ${({ theme }) => theme.fontSize.xl};
   font-weight: bold;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
+  letter-spacing: -0.5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const WriteButtonWrapper = styled.div`
+  display: flex;
+  justify-content: flex-end;  /* 오른쪽 정렬 */
+  margin-bottom: 0.25rem;
 `;
 
 const WriteButton = styled.button`
-  padding: 0.6rem 1.2rem;
-  margin-bottom: 1rem;
-  background-color: #4f46e5;
+  padding: 0.4rem 1rem;   /* 작게 */
+  background-color: ${({ theme }) => theme.colors.primary};
   color: white;
   border: none;
-  border-radius: 8px;
-  font-weight: bold;
-  cursor: pointer;
-
+  border-radius: 6px;
+  font-size: 0.85rem; 
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
   &:hover {
-    background-color: #4338ca;
+    background-color: #fbbf24;
   }
 `;
+
 
 const Table = styled.table`
   width: 100%;
   border-collapse: collapse;
+  border-radius: 8px;
+  overflow: hidden;
 
   th, td {
-    border: 1px solid #e5e7eb;
-    padding: 0.9rem;
+    border: 1px solid ${({ theme }) => theme.colors.border};
+    padding: 1rem; // 🔥 padding 증가
     text-align: center;
   }
 
   th {
-    background-color: #f9fafb;
+    background-color: #fef3c7; // 🔥 밝은 노란색 강조 배경
     font-weight: bold;
-    color: #333;
-  }
-
-  td {
+    color: #111827;
     font-size: 0.95rem;
   }
 
-  td:first-child {
-    color: #4f46e5;
-    cursor: pointer;
-    text-decoration: underline;
-
-    &:hover {
-      color: #4338ca;
-    }
+  td {
+    font-size: 0.9rem;
+    color: ${({ theme }) => theme.colors.text};
   }
 
+  td:first-child {
+    color: ${({ theme }) => theme.colors.text};
+    cursor: pointer;
+
+    &:hover {
+    text-decoration: underline;
+    }
+  }
   tr:hover {
-    background-color: #f3f4f6;
+    background-color: #fefce8; // 🔥 hover 시 연노랑 배경
   }
 `;
 
 const Pagination = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 2rem;
-  gap: 0.4rem;
+  margin-top: 2.5rem;
+  gap: 0.5rem;
 `;
 
 const PageButton = styled.button<{ active?: boolean }>`
-  padding: 0.4rem 0.8rem;
-  border: 1px solid #d1d5db;
-  background-color: ${({ active }) => (active ? "#4f46e5" : "#fff")};
+  padding: 0.5rem 1rem;
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  background-color: ${({ active, theme }) =>
+    active ? theme.colors.primary : "#fff"};
   color: ${({ active }) => (active ? "#fff" : "#111827")};
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
   font-weight: ${({ active }) => (active ? "bold" : "normal")};
+  transition: all 0.2s;
 
   &:hover:not(:disabled) {
-    background-color: ${({ active }) => (active ? "#4338ca" : "#f3f4f6")};
+    background-color: ${({ active }) =>
+      active ? "#ea580c" : "#fef3c7"}; 
   }
 
   &:disabled {
-    opacity: 0.4;
+    opacity: 0.5;
     cursor: not-allowed;
   }
 `;

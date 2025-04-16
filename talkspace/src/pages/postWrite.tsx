@@ -103,60 +103,76 @@ export default function PostWritePage() {
   );
 }
 
-// 스타일 정의
+// styled-components
 const Container = styled.div`
-  max-width: 700px;
+  max-width: 800px;
   margin: 2rem auto;
-  padding: 2rem;
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-`;
-const Title = styled.h2`
-  font-size: 1.5rem;
-  font-weight: bold;
-  text-align: center;
-  margin-bottom: 2rem;
-  color: #333;
+  padding: 2.5rem;
+  background-color: ${({ theme }) => theme.colors.white};
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
 `;
 
+const Title = styled.h2`
+  font-size: ${({ theme }) => theme.fontSize.xl};
+  font-weight: bold;
+  margin-bottom: 2rem;
+  text-align: center;
+  color: ${({ theme }) => theme.colors.text};
+`;
 
 const TitleInput = styled.input`
+  padding: 0.8rem 1rem;
   width: 100%;
-  padding: 1rem;
-  font-size: 1.2rem;
-  margin-bottom: 1rem;
-  border: 1px solid #ccc;
+  border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: 8px;
+  font-size: ${({ theme }) => theme.fontSize.base};
+  margin-bottom: 1rem;
+
+  &:focus {
+    outline: none;
+    border-color: ${({ theme }) => theme.colors.primary};
+    box-shadow: 0 0 0 3px #fef3c7;
+  }
 `;
 
 const ContentArea = styled.textarea`
-  width: 100%;
-  height: 300px;
   padding: 1rem;
-  font-size: 1rem;
-  border: 1px solid #ccc;
+  width: 100%;
+  border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: 8px;
+  font-size: ${({ theme }) => theme.fontSize.base};
+  min-height: 200px;
   resize: vertical;
   margin-bottom: 1rem;
+
+  &:focus {
+    outline: none;
+    border-color: ${({ theme }) => theme.colors.primary};
+    box-shadow: 0 0 0 3px #fef3c7;
+  }
 `;
 
 const FileInput = styled.input`
   margin-bottom: 1rem;
+  font-size: ${({ theme }) => theme.fontSize.sm};
+  color: ${({ theme }) => theme.colors.text};
 `;
 
 const Button = styled.button`
   display: block;
   margin-left: auto;
-  padding: 0.75rem 1.5rem;
-  background-color: #4f46e5;
+  margin-top: 1rem;
+  padding: 0.6rem 1.4rem;
+  background-color: ${({ theme }) => theme.colors.primary};
   color: white;
   font-weight: bold;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
+  font-size: ${({ theme }) => theme.fontSize.base};
   cursor: pointer;
 
   &:hover {
-    background-color: #4338ca;
+    background-color: #fbbf24;
   }
 `;

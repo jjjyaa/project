@@ -44,7 +44,6 @@ export default function SignupPage() {
   return (
       <Container>
       <SignupBox>
-    <div style={{ maxWidth: 400, margin: "0 auto" }}>
       <Title>회원가입</Title>
       <form onSubmit={handleSubmit}>
         <Input type="email" name="email" placeholder="이메일" onChange={handleChange} /><br />
@@ -55,7 +54,6 @@ export default function SignupPage() {
         <hr/>
         <Button type="submit">가입하기</Button>
       </form>
-    </div>
     </SignupBox>
     </Container>
   );
@@ -63,47 +61,58 @@ export default function SignupPage() {
 
 // 스타일
 const Container = styled.div`
+  min-height: 80vh;
   display: flex;
-  justify-content: center;
   align-items: center;
-  height: 60vh;
+  justify-content: center;
 `;
 
 const SignupBox = styled.div`
-  width: 400px;
-  padding: 2rem;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  background-color: #fff;
+  background-color: ${({ theme }) => theme.colors.white};
+  padding: 2.5rem;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+  width: 100%;
+  max-width: 400px;
 `;
 
 const Title = styled.h2`
-  text-align: center;
+  font-size: ${({ theme }) => theme.fontSize.xl};
+  font-weight: bold;
   margin-bottom: 2rem;
+  text-align: center;
+  color: ${({ theme }) => theme.colors.text};
 `;
 
 const Input = styled.input`
-  width: 90%;
-  padding: 0.75rem;
+  width: 100%;
+  padding: 0.8rem 1rem;
   margin-bottom: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 1rem;
-`;
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: 8px;
+  font-size: ${({ theme }) => theme.fontSize.base};
 
-const Button = styled.button`
-  width: 90%;
-  padding: 0.75rem;
-  background-color: #4f46e5;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-weight: bold;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #4338ca;
+  &:focus {
+    outline: none;
+    border-color: ${({ theme }) => theme.colors.primary};
+    box-shadow: 0 0 0 3px #fef3c7;
   }
 `;
 
+const Button = styled.button`
+  width: 100%;
+  padding: 0.8rem;
+  background-color: ${({ theme }) => theme.colors.primary};
+  color: white;
+  font-weight: bold;
+  border: none;
+  margin-top: 1rem;
+  border-radius: 8px;
+  font-size: ${({ theme }) => theme.fontSize.base};
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: #fbbf24;
+  }
+`;

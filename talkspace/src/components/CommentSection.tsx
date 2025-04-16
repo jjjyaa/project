@@ -133,23 +133,24 @@ export default function CommentSection({ boardId }: CommentSectionProps) {
 }
 
 const CommentBox = styled.div`
-  margin-top: 2rem;
-  padding: 1rem;
-  border-top: 1px solid #ddd;
+  margin-top: 2.5rem;
+  padding: 2rem;
+  background-color: ${({ theme }) => theme.colors.white};
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 `;
 
 const CommentList = styled.ul`
   list-style: none;
   padding: 0;
+  margin-top: 1rem;
 `;
 
 const CommentItem = styled.li`
-  margin-bottom: 1.5rem;
-  text-align: left;
-  background-color: #f9f9f9;
+  background-color: ${({ theme }) => theme.colors.gray};
   padding: 1rem;
-  border-radius: 6px;
-  position: relative;
+  border-radius: 10px;
+  margin-bottom: 1rem;
 `;
 
 const CommentHeader = styled.div`
@@ -161,42 +162,52 @@ const CommentHeader = styled.div`
   strong {
     font-weight: bold;
     font-size: 0.95rem;
+    color: ${({ theme }) => theme.colors.text};
   }
 `;
 
 const CommentFooter = styled.div`
   display: flex;
-  justify-content: flex-end;
-  margin-top: 0.5rem;
-
-  small {
-    color: gray;
-    font-size: 0.8rem;
-  }
+  justify-content: space-between;
+  margin-top: 0.6rem;
+  font-size: 0.8rem;
+  color: ${({ theme }) => theme.colors.subText};
 `;
 
 const WriteBox = styled.div`
-  margin-top: 1rem;
+  margin-top: 1.5rem;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 
   textarea {
     width: 100%;
-    height: 80px;
-    padding: 0.5rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    height: 100px;
+    padding: 0.8rem;
+    font-size: ${({ theme }) => theme.fontSize.base};
+    border: 1px solid ${({ theme }) => theme.colors.border};
+    border-radius: 8px;
+
+    &:focus {
+      outline: none;
+      border-color: ${({ theme }) => theme.colors.primary};
+      box-shadow: 0 0 0 3px #fef3c7;
+    }
   }
 
   button {
     align-self: flex-end;
-    padding: 0.5rem 1rem;
-    background: #4f46e5;
+    padding: 0.5rem 1.2rem;
+    background: ${({ theme }) => theme.colors.primary};
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 8px;
+    font-size: 0.85rem;
     cursor: pointer;
+
+    &:hover {
+      background-color: #fbbf24;
+    }
   }
 `;
 
@@ -206,10 +217,14 @@ const ActionButtons = styled.div`
 
   button {
     font-size: 0.75rem;
-    padding: 0.25rem 0.5rem;
+    padding: 0.3rem 0.7rem;
     background: #e5e7eb;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
+
+    &:hover {
+      background-color: #d1d5db;
+    }
   }
 `;

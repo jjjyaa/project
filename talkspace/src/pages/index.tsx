@@ -37,38 +37,41 @@ export default function Home() {
 
 // 스타일 정의
 const Wrapper = styled.div`
-  max-width: 400px;
-  margin: 100px auto;
-  text-align: center;
-  background-color: #fff7ed;
+  max-width: 600px;
+  margin: 3rem auto;
+  padding: 2.5rem;
+  background-color: ${({ theme }) => theme.colors.white};
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
+
 const Welcome = styled.h2`
-  font-size: 1.5rem;
-  font-weight: bold;
+  font-size: ${({ theme }) => theme.fontSize.xl};
+  color: ${({ theme }) => theme.colors.text};
   margin-bottom: 2rem;
+  text-align: center;
 `;
 
 const ButtonGroup = styled.div`
   display: flex;
-  justify-content: center;
   gap: 1rem;
-  padding-bottom:5px;
 `;
 
-const Button = styled.button<{ variant?: "primary" | "gray" }>`
-  padding: 0.75rem 1.5rem;
+const Button = styled.button`
+  padding: 0.6rem 1.4rem;
+  background-color: ${({ theme }) => theme.colors.primary};
+  color: white;
   border: none;
   border-radius: 8px;
+  font-size: ${({ theme }) => theme.fontSize.base};
   font-weight: bold;
-  font-size: 1rem;
   cursor: pointer;
-
-  background-color: ${(props) =>
-    props.variant === "gray" ? "#e5e7eb" : "#4f46e5"};
-  color: ${(props) => (props.variant === "gray" ? "#333" : "#fff")};
+  transition: background-color 0.2s ease;
 
   &:hover {
-    background-color: ${(props) =>
-      props.variant === "gray" ? "#d1d5db" : "#4338ca"};
+    background-color: #fbbf24;
   }
 `;

@@ -123,82 +123,83 @@ export default function PostDetailPage({ params }: { params: { id: string } }) {
 
 // 스타일
 const Card = styled.div`
-  max-width: 700px;
-  margin: 2rem auto;
-  background: #fff;
-  border-radius: 12px;
-  padding: 2rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  max-width: 800px;
+  margin: 2.5rem auto;
+  background: ${({ theme }) => theme.colors.white};
+  border-radius: 16px;
+  padding: 2.5rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
 `;
 
 const Title = styled.h2`
-  font-size: 1.8rem;
+  font-size: ${({ theme }) => theme.fontSize.xl};
   font-weight: bold;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  color: ${({ theme }) => theme.colors.text};
 `;
 
 const Meta = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  font-size: 0.80rem;
-  color: #555;
-  margin-bottom: 1rem;
+  font-size: 0.85rem;
+  color: ${({ theme }) => theme.colors.subText};
+  margin-bottom: 1.2rem;
   gap: 4px;
 `;
 
 const Divider = styled.hr`
-  margin: 1.5rem 0;
+  margin: 1.8rem 0;
   border: none;
-  border-top: 1px solid #ddd;
+  border-top: 1px solid ${({ theme }) => theme.colors.border};
 `;
 
 const Content = styled.p`
-  font-size: 1.2rem;
-  line-height: 1.6;
+  font-size: ${({ theme }) => theme.fontSize.base};
+  line-height: 1.8;
   white-space: pre-wrap;
+  color: ${({ theme }) => theme.colors.text};
 `;
 
 const ButtonBox = styled.div`
-  margin-top: 3rem;
+  margin-top: 2.5rem;
   display: flex;
   justify-content: flex-end;
   gap: 0.5rem;
 `;
 
 const Button = styled.button<{ color?: "gray" | "red" }>`
-  padding: 0.5rem 1.1rem;
+  padding: 0.5rem 1.2rem;
   border: none;
   border-radius: 8px;
-  font-weight: bold;
+  font-weight: 600;
+  font-size: 0.85rem;
   cursor: pointer;
-  font-size: 0.8rem;
-
-  background-color: ${(props) =>
-    props.color === "gray"
+  background-color: ${({ color }) =>
+    color === "gray"
       ? "#e5e7eb"
-      : props.color === "red"
+      : color === "red"
       ? "#ef4444"
-      : "#4f46e5"};
-  color: ${(props) =>
-    props.color === "gray" ? "#333" : props.color === "red" ? "white" : "white"};
+      : "#fcd34d"};
+  color: ${({ color }) =>
+    color === "gray" ? "#111" : "#fff"};
 
   &:hover {
-    background-color: ${(props) =>
-      props.color === "gray"
+    background-color: ${({ color }) =>
+      color === "gray"
         ? "#d1d5db"
-        : props.color === "red"
+        : color === "red"
         ? "#dc2626"
-        : "#4338ca"};
+        : "#fbbf24"};
   }
 `;
 
 const FileBox = styled.div`
-  margin-top: 3rem;
+  margin-top: 2rem;
 
   h4 {
     font-weight: bold;
-    margin-bottom: 0.8rem;
+    margin-bottom: 0.6rem;
   }
 
   ul {
@@ -207,11 +208,11 @@ const FileBox = styled.div`
   }
 
   li a {
-    color: #1d4ed8;
+    color: #2563eb;
     text-decoration: underline;
 
     &:hover {
-      color: #4338ca;
+      color: #1e40af;
     }
   }
 `;
@@ -221,7 +222,7 @@ const LikeButton = styled.button`
   border: none;
   font-size: 1.5rem;
   cursor: pointer;
-  color: ${props => props.color || "#ff4d4f"};
+  color: #ef4444;
   transition: transform 0.2s;
 
   &:hover {
