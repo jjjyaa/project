@@ -18,6 +18,9 @@ export interface SignupForm {
 export type User = {
   email: string;
   name: string;
+  
+  phone?: string;
+  address?: string;
 };
 // Context Provider 컴포넌트 정의
 export interface AuthProviderProps {

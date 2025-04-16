@@ -3,12 +3,16 @@
 import { ReactNode } from 'react';
 import styled from 'styled-components';
 import Link from 'next/link';
+import { useAuth } from '@/context/AuthContext';
 
 type Props = {
   children: ReactNode;
 };
 
 export default function MainLayout({ children }: Props) {
+
+  const { user, logout } = useAuth();
+
   return (
     <Container>
       <Header>
@@ -16,7 +20,14 @@ export default function MainLayout({ children }: Props) {
         <Nav>
           <StyledLink href="/postList">글 목록</StyledLink>
           <StyledLink href="/postWrite">글쓰기</StyledLink>
-          <StyledLink href="/login">로그인</StyledLink>
+          {user ? (
+            <>
+              <StyledLink href="/memberEdit">정보수정</StyledLink>
+              <LogoutButton onClick={logout}>로그아웃</LogoutButton>
+            </>
+          ) : (
+            <StyledLink href="/login">로그인</StyledLink>
+          )}
         </Nav>
       </Header>
 
@@ -55,10 +66,17 @@ const Nav = styled.nav`
 `;
 
 const StyledLink = styled(Link)`
-  color: ${({ theme }) => theme.colors.text}; // ✅ 검정 텍스트
+  color: ${({ theme }) => theme.colors.text};
   font-weight: bold;
   text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+`;
 
+const LogoutButton = styled.button`
+  font-weight: bold;
+  color: ${({ theme }) => theme.colors.text};
   &:hover {
     text-decoration: underline;
   }

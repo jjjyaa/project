@@ -41,6 +41,9 @@ export interface PostList {
     createdDatetime: string;
     hitCnt: number;
     name: string;
+
+    commentCount: number;
+    likeCount: number;
 }
 // 게시글 입력 타입
 export interface PostForm {

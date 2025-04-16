@@ -64,7 +64,11 @@ export default function PostListPage() {
           {posts.length > 0 ? (
             posts.map((post) => (
               <tr key={post.boardId}>
-                <td onClick={() => router.push(`/post/${post.boardId}`)}>{post.title}</td>
+                <td onClick={() => router.push(`/post/${post.boardId}`)}>
+                  {post.title}
+                  {post.commentCount > 0 && ` (${post.commentCount})`}
+                  {post.likeCount > 0 && ` ❤️ ${post.likeCount}`}
+                </td>
                 <td>{post.name}</td>
                 <td>{post.createdDatetime}</td>
                 <td>{post.hitCnt}</td>
